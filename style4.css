@@ -1,0 +1,120 @@
+/* Header */
+*{
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #cbc7c7;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 50px;
+  border-bottom: 1px solid #000000;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+button {
+  background-color: #000000;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background-color: #3f3d3d;
+}
+
+button:active {
+  background-color: #716c6c;
+}
+
+input {
+  background-color: #ffffff;
+  color: #000000;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: 1px solid #0dc4ed;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+input:hover {
+  background-color: #f0f0f0;
+}
+
+input:active {
+  background-color: #ada6a6;
+  border: blue;
+}
+
+label {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Table */
+
+table {
+  width: 30px;
+  border-collapse: collapse;
+}
+
+th {
+  background-color: #fe0606;
+  color: #ffffff;
+}
+
+td {
+  text-align: center;
+}
+
+
+
+/*button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+  
+  button:hover {
+    background-color: #3e8e41;
+  }
+  
+  button:active {
+    transform: scale(0.95);
+  }
+  
+  button:before {
+    content: "\1F4BE";
+    margin-right: 5px;
+  }
+  .celda{
+    
+        border: none;
+        font-size: 16px;
+        height: auto;
+        margin: 0;
+        outline: 0;
+        padding: 15px;
+        width: 100%;
+        background-color: #a1d1f5;
+        color: #64696d;
+        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
+        margin-bottom: 30px;
+      
+  }*/
