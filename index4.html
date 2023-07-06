@@ -3,20 +3,55 @@
 <head>
     <title>Hoja de cálculo simple</title>
     <link rel="stylesheet" href="style4.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material-ui/core@4.12.3/dist/material-ui.min.css">
+
+
 </head>
 <body>
-    <header>
-        <nav>
-        <button id="guardar">Guardar</button>
-        <button id="cargar">Cargar</button>
-        <input type="file" id="file-input" style="display: none;">
-        <label>Filas: <input type="number" id="filas" value="3"></label>
-        <label>Columnas: <input type="number" id="columnas" value="3"></label>
-        <button id="generar">Generar tabla</button>
-        </nav>
-    </header>
-    <table id="tabla" >
-    </table>
-<script src="script4.js"></script>
-</body>
+    <div class="container">
+        <div class="toolbar">
+            <img src="excel.png" width="80" height="60">
+            <button id="guardar">Guardar</button>
+            <button id="cargar">Cargar</button>
+            <input type="file" id="file-input" style="display: none;">
+            <label>Filas: <input type="number" id="filas" value="3"></label>
+            <label>Columnas: <input type="number" id="columnas" value="3"></label>
+            <button id="generar">Generar tabla</button>
+            <button id="limpiarDatos">Limpiar Datos</button>
+            <input type="text" id="columnaInput" placeholder="Ingrese el número de columna">
+            <button id="ascendente"><i class="fas fa-sort-amount-up"></i></button>
+            <button id="descendente"><i class="fas fa-sort-amount-down"></i></button>
+            <button id="sumar" title="Sumar"><i class="fas fa-plus"></i></button>
+            <button id="promedio" title="Promedio"><i class="fas fa-calculator"></i></button>
+            <button id="maximo" title="Máximo"><i class="fas fa-arrow-up"></i></button>
+            <button id="minimo" title="Mínimo"><i class="fas fa-arrow-down"></i></button>
+        </div>
+        <div class="table-container">
+        <table id="tabla" class="table" tabindex="0">
+        </table>
+        </div>
+    </div>
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <h2 class="modal-title">Resultados</h2>
+      <span class="close">&times;</span>
+      <div class="modal-body">
+      <p id="resultado"></p> 
+        
+      </div>
+      <div class="modal-actions">
+        <button id="modal-close" class="btn btn-secondary modal-close">Cerrar</button>
+      </div>
+    </div>
+  </div>
+        <script src="https://cdn.jsdelivr.net/npm/react@17.0.2/umd/react.production.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@material-ui/core@4.12.3/dist/material-ui.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="script4.js"></script>
+    </body>
 </html>
+
