@@ -1,5 +1,5 @@
 document.getElementById('fcfs-sjf').addEventListener('click', function() {
-    window.location.href = 'index.html';
+    window.location.href = 'memoria.html';
 });
 
 document.getElementById('round-robin').addEventListener('click', function() {
