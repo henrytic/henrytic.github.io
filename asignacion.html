@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asignacion de Memoria Primer Ejercicio</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="asignacion.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="container bg-info">
+
+    <div class="row justify-content-center mt-4">
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Asignacion de Memoria</h2>
+
+                    <div class="mb-3">
+                        <label for="totalMemoryInput" class="form-label">Tamaño Total de la Memoria:</label>
+                        <input type="number" id="totalMemoryInput" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="partitionInput" class="form-label">Particion:</label>
+                        <input type="text" id="partitionInput" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="baseInput" class="form-label">Base:</label>
+                        <input type="number" id="baseInput" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="processSizeInput" class="form-label">Tamaño del Proceso:</label>
+                        <input type="number" id="processSizeInput" class="form-control" required>
+                    </div>
+
+                    <button type="button" class="btn btn-success" onclick="addData()">Añadir Datos</button>
+                    <button type="button" class="btn btn-success" onclick="generateChart()">Generar Gráfico</button>
+
+                    <div class="mb-3">
+                        <label for="newProcessSizeInput" class="form-label">Agregar Procesos:</label>
+                        <input type="number" id="newProcessSizeInput" class="form-control" required>
+                    </div>
+
+                    <button type="button" class="btn btn-success" onclick="addProcess()">Agregar Proceso por First Fit</button>
+                    <button type="button" class="btn btn-success" onclick="addProcessBestFit()">Agregar Proceso por Best Fit</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteProcesses()">Borrar Procesos</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card para la tabla y el gráfico -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div id="tableContainer"></div>
+                    <canvas id="result"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="asignacion.js"></script>
+
+    <!-- Bootstrap 5 JS, Popper.js, and jQuery (required for the navbar toggle) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+
+</html>
