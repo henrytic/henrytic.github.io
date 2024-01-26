@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memoria principal</title>
+    <link rel="stylesheet" href="asignacion.css">
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Algoritmos de Gestion de Memoria</a>
+            <div class="d-flex">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarParticionesModal">
+                    <span class="badge bg-secondary">1</span>&nbsp;Añadir Particiones
+                </button>&nbsp;&nbsp;
+
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarTrabajosModal">
+                    <span class="badge bg-secondary">2</span>&nbsp;Añadir Trabajos
+                </button>
+
+            </div>
+        </div>
+    </nav>
+    <h4 class="fw-bold mt-3"></h4>
+    <div class="txt cont"><input class="titulo alert alert-primary" id="mostrarTitulo" type="text" value="First Fit"></div></div>
+
+  <!-- Modal para Añadir Trabajos -->
+    <div class="modal fade" id="agregarTrabajosModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning" style="height: 60px;">
+                    <h5 class="modal-title">Nuevo Trabajo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="text-align: center;">
+                    <hr>
+                    <h5 style="text-align: left;">Agregar Datos de la Memoria</h5>
+                    <hr>
+                    <div class="form-group">
+                        <label for="trabajo">N° Trabajo:&nbsp;</label>
+                        <input type="number" class="form-control text-center" min="0" value="1" id="trabajo">
+                    </div>
+                    <div class="form-group">
+                        <label for="memoria">Tamaño de Memoria:</label>
+                        <input type="number" class="form-control text-center" id="memoria" min="0" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="Tmemoria">Tiempo en Memoria:&nbsp;</label>
+                        <input type="number" class="form-control text-center" id="Tmemoria" value="0.1" min="0.1" step="0.1">
+                    </div>
+                    <hr class="my-4">
+                    
+                    <button class="btn btn-secondary" onclick="agregar()">Agregar Memoria <i class="fa-solid fa-plus"></i></button>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal para Añadir Particiones -->
+    <div class="modal fade" id="agregarParticionesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning" style="height: 60px;">
+                    <h5 class="modal-title">Nueva Partición</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="text-align: center;">
+                    <div class="container">
+                        <hr>
+                        <h5 style="text-align: left;">Políticas de Planificación</h5>
+                        <hr>
+                        
+                        <h6>Metodos de Asignacion de Memoria</h6>
+                        <div class="form-group">
+                            <select class="form-control opciones botonP" id="tipo" onchange="repre_prosesamiento()">
+                                <option  value="First_fit" selected>First_fit</option>
+                                <option  value="Best_fit">Best_fit</option>
+                            </select>
+                        </div>
+                        <hr>
+                        <h5 class="text-start">Agregar Nueva Partición</h5>
+                        <hr>
+                        <div class="form-group">
+                            <label for="particion">Tamaño de Partición:</label>
+                            <input type="number" class="form-control" id="particion" min="1" value="2">
+                        </div>
+                        <br>
+                        <button class="btn btn-secondary" onclick="agregarP()">Agregar Partición <i class="fa-solid fa-plus"></i></button>
+                        <hr>
+                        
+                        <div class="form-row">
+                            <input class="celdaENE" type="text" value="Trabajo" disabled>
+                            <input class="celdaENE" type="text" value="Memoria" disabled>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="contenedor" id="contenedorP"></div>
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row align-items-start">
+        <div class="col">
+            <h4 id="tit" class="text-center fw-bold">Tabla de trabajos</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered table-dark">
+                    <thead>
+                        <tr>
+                            <th scope="col">N° Trabajo</th>
+                            <th scope="col">Tamaño de Memoria</th>
+                            <th scope="col">Tiempo en Memoria</th>
+                            <th scope="col">Tiempo en proceso</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contenedor">
+                        <!-- Aquí se llenarán dinámicamente las filas de la tabla con JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <!--<div class="supe">
+                <input class="celdaNom" type="text" disabled>
+                <input class="celdaNom" type="text" disabled>
+                <input class="celdaNom" type="text">
+                <input class="celdaNom" id="TRR" type="text">
+            </div>-->
+        </div>
+    </div>    
+    
+    
+      <div class="row align-items-start">
+        <div class="col">
+            <div class="tabla" style="padding: 15px 10%;">
+                <div id="vista" class="vista">
+                    <div id="vistaD"></div>
+                    <div id="vistaN"></div><br>
+                    <div id="vistaP"></div>
+                </div>
+            </div>
+        </div>
+      </div>
+</body>
+<script src="asignacion.js"></script>
+</html>
