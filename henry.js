@@ -11,5 +11,5 @@ document.getElementById('srtf').addEventListener('click', function() {
 });
 
 document.getElementById('memoria').addEventListener('click', function() {
-    window.location.href = 'asignacion.html';
+    window.location.href = 'interfaz-memoria.html';
 });
