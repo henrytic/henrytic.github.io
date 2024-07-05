@@ -1,0 +1,444 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bisector Tree</title>
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: #dcffdf; 
+}
+
+h1 {
+    margin: 20px 20px;
+    color: #333; 
+}
+
+.form-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 700px;
+    margin: 20px 20px;
+    background-color: #fdffe7; 
+    padding: 15px; 
+    border-radius: 8px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc; 
+}
+
+.form-container input,
+.form-container button {
+    padding: 10px;
+    margin-right: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+    background-color: #f6f8cf;
+}
+
+.form-container input {
+    flex: 1;
+}
+
+.form-container button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background-color 0.3s ease; 
+}
+
+.form-container button:hover {
+    background-color: #0056b3;
+}
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+    margin-top: 20px;
+}
+
+.canvas-container {
+    flex: 1;
+    border: 1px solid #ccc; 
+    display: flex;
+    align-items: flex-start;
+    background-color: #fdffe7; 
+    padding: 20px; 
+    border-radius: 8px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+}
+
+.canvas-container canvas {
+    border: 1px solid #ccc; 
+    border-radius: 8px; 
+    background-color: #c7e6ff;
+}
+
+.tree-container {
+    flex: 7;
+    border: 1px solid #ccc; 
+    height: 600px;
+    overflow: auto;
+    background-color: #fdffe7; 
+    padding: 20px; 
+    border-radius: 8px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+}
+
+.node circle {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 3px;
+}
+
+.node text {
+    font: 12px sans-serif;
+}
+
+.link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 2px;
+}
+    </style>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+</head>
+<body>
+    <h1>Bisector Tree</h1>
+    <div class="form-container">
+        <input type="text" id="searchX" placeholder="Coordenada X">
+        <input type="text" id="searchY" placeholder="Coordenada Y">
+        <input type="text" id="searchRadius" placeholder="Radio">
+        <button id="searchButton">Buscar</button>
+    </div>
+    <div class="container">
+        <div class="canvas-container">
+            <canvas id="canvas" width="300" height="300"></canvas>
+        </div>
+
+        <div class="tree-container">
+            <div id="tree"></div>
+        </div>
+    </div>
+    <script>
+        class Punto {
+            constructor(xx = 0, yy = 0) {
+                this.x = xx;
+                this.y = yy;
+            }
+
+            equals(otro) {
+                return this.x === otro.x && this.y === otro.y;
+            }
+        }
+
+        class Nodo {
+            constructor(C1, C2, I = null, D = null) {
+                this.c1 = C1;
+                this.c2 = C2;
+                this.Izq = I;
+                this.Der = D;
+                this.rc1 = 0;
+                this.rc2 = 0;
+            }
+        }
+
+        class BisectorTree {
+            constructor() {
+                this.Raiz = null;
+                this.puntos = [];
+                this.bisectrizDibujada = false;
+            }
+
+            Insertar(p) {
+                this.puntos.push(p);
+                if (this.puntos.length >= 2) {
+                    this.Raiz = this.ConstruirArbol(this.puntos.slice());
+                }
+            }
+
+            ConstruirArbol(puntos) {
+                if (puntos.length < 2) return null;
+
+                let c1 = puntos[0];
+                let c2 = puntos[1];
+
+                let izq = [];
+                let der = [];
+
+                puntos.forEach(p => {
+                    if (this.Distancia(p, c1) < this.Distancia(p, c2)) {
+                        izq.push(p);
+                    } else {
+                        der.push(p);
+                    }
+                });
+
+                let nodo = new Nodo(c1, c2);
+                nodo.Izq = this.ConstruirArbol(izq);
+                nodo.Der = this.ConstruirArbol(der);
+
+                nodo.rc1 = this.CalcularRadioCobertura(nodo.c1, izq);
+                nodo.rc2 = this.CalcularRadioCobertura(nodo.c2, der);
+
+                return nodo;
+            }
+
+            Distancia(a, b) {
+                return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
+            }
+
+            CalcularRadioCobertura(centro, puntos) {
+                let maxdist = 0;
+                puntos.forEach(p => {
+                    let dist = this.Distancia(centro, p);
+                    if (dist > maxdist) {
+                        maxdist = dist;
+                    }
+                });
+                return maxdist;
+            }
+
+            Buscar(q, r, nodo, resultados) {
+                if (!nodo) return;
+
+                let dist_c1 = this.Distancia(q, nodo.c1);
+                let dist_c2 = this.Distancia(q, nodo.c2);
+
+                if (dist_c1 - r <= nodo.rc1) {
+                    resultados.push({ punto: nodo.c1, radio: nodo.rc1 });
+                }
+                if (dist_c2 - r <= nodo.rc2) {
+                    resultados.push({ punto: nodo.c2, radio: nodo.rc2 });
+                }
+
+                if (dist_c1 - r <= nodo.rc1) {
+                    this.Buscar(q, r, nodo.Izq, resultados);
+                }
+                if (dist_c2 - r <= nodo.rc2) {
+                    this.Buscar(q, r, nodo.Der, resultados);
+                }
+            }
+        }
+
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const treeContainer = document.getElementById('tree');
+
+        let bisectorTree = new BisectorTree();
+        let initialBisectorDrawn = false;
+
+        canvas.addEventListener('click', (event) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            const punto = new Punto(x, y);
+            bisectorTree.Insertar(punto);
+            redrawCanvas();
+            displayTree(bisectorTree.Raiz);
+            if (!initialBisectorDrawn && bisectorTree.puntos.length >= 2) {
+                drawInitialBisector();
+                initialBisectorDrawn = true;
+            }
+        });
+
+        document.getElementById('searchButton').addEventListener('click', () => {
+            const x = parseFloat(document.getElementById('searchX').value);
+            const y = parseFloat(document.getElementById('searchY').value);
+            const r = parseFloat(document.getElementById('searchRadius').value);
+            const searchPoint = new Punto(x, y);
+            const resultados = [];
+            bisectorTree.Buscar(searchPoint, r, bisectorTree.Raiz, resultados);
+            highlightResults(resultados);
+        });
+
+        document.getElementById('searchX').addEventListener('change', () => {
+        actualizarPuntoDesdeInputs();
+        });
+
+        document.getElementById('searchY').addEventListener('change', () => {
+            actualizarPuntoDesdeInputs();
+        });
+
+        document.getElementById('searchRadius').addEventListener('change', () => {
+            actualizarPuntoDesdeInputs();
+        });
+
+        function actualizarPuntoDesdeInputs() {
+            const x = parseFloat(document.getElementById('searchX').value);
+            const y = parseFloat(document.getElementById('searchY').value);
+            const punto = new Punto(x, y);
+
+            const index = bisectorTree.puntos.findIndex(p => p.equals(punto));
+            if (index !== -1) {
+                bisectorTree.puntos[index] = punto;
+            }
+
+            // Si el punto no existe en la lista, lo agrega
+            if (index === -1) {
+                bisectorTree.Insertar(punto);
+            }
+
+            redrawCanvas();
+            displayTree(bisectorTree.Raiz);
+        }
+
+
+        function redrawCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            bisectorTree.puntos.forEach(p => drawPoint(p.x, p.y));
+            if (initialBisectorDrawn) {
+                drawInitialBisector();
+            }
+        }
+
+        function drawPoint(x, y) {
+            ctx.beginPath();
+            ctx.arc(x, y, 3, 0, 2 * Math.PI, true);
+            ctx.fill();
+        }
+
+        function drawInitialBisector() {
+            if (bisectorTree.puntos.length >= 2) {
+                const p1 = bisectorTree.puntos[0];
+                const p2 = bisectorTree.puntos[1];
+                const midX = (p1.x + p2.x) / 2;
+                const midY = (p1.y + p2.y) / 2;
+
+                const dx = p2.x - p1.x;
+                const dy = p2.y - p1.y;
+                const slope = -dx / dy;
+
+                const x1 = 0;
+                const y1 = midY + slope * (x1 - midX);
+                const x2 = canvas.width;
+                const y2 = midY + slope * (x2 - midX);
+
+                drawLine(x1, y1, x2, y2);
+
+                // Dibujar la línea de distancia entre los dos puntos iniciales
+                drawLine(p1.x, p1.y, p2.x, p2.y);
+            }
+        }
+
+        function drawLine(x1, y1, x2, y2) {
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+        }
+
+        function displayTree(root) {
+            treeContainer.innerHTML = '';
+
+            const rootHierarchy = d3.hierarchy(root, d => [d.Izq, d.Der].filter(n => n !== null));
+
+            const treeLayout = d3.tree().nodeSize([150, 150]); // Tamaño de cada nodo
+
+            const treeData = treeLayout(rootHierarchy);
+
+            const nodes = treeData.descendants();
+            const links = treeData.links();
+
+            const treeHeight = treeData.height * 200; // Multiplicador para ajustar el tamaño vertical
+
+            const treeWidth = treeData.height * 600; // Ajuste para calcular el ancho basado en la altura
+
+            const svg = d3.select('#tree').append('svg')
+                .attr('width', treeWidth + 1000)
+                .attr('height', treeHeight + 200); 
+
+            const g = svg.append('g')
+                .attr('transform', `translate(${treeWidth / 2}, 50)`); 
+
+            g.selectAll('.link')
+                .data(links)
+                .enter().append('line')
+                .attr('class', 'link')
+                .attr('x1', d => d.source.x)
+                .attr('y1', d => d.source.y)
+                .attr('x2', d => d.target.x)
+                .attr('y2', d => d.target.y);
+
+            const node = g.selectAll('.node')
+                .data(nodes)
+                .enter().append('g')
+                .attr('class', 'node')
+                .attr('transform', d => `translate(${d.x},${d.y})`);
+
+            const rectWidth = 140; 
+            const rectHeight = 95; 
+            const rectPadding = 5; 
+
+            node.append('rect')
+                .attr('x', -rectWidth / 2)
+                .attr('y', -rectHeight / 2)
+                .attr('width', rectWidth)
+                .attr('height', rectHeight)
+                .attr('rx', 10) 
+                .attr('ry', 10)
+                .style('fill', '#f9f9f9')
+                .style('stroke', 'steelblue')
+                .style('stroke-width', '2px');
+
+            node.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('dominant-baseline', 'middle')
+                .text(d => `Centro1: (${d.data.c1.x.toFixed(2)}, ${d.data.c1.y.toFixed(2)})`)
+                .attr('x', 0)
+                .attr('y', -20);
+
+            node.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('dominant-baseline', 'middle')
+                .text(d => `Centro2: (${d.data.c2.x.toFixed(2)}, ${d.data.c2.y.toFixed(2)})`)
+                .attr('x', 0)
+                .attr('y', 0);
+
+            node.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('dominant-baseline', 'middle')
+                .text(d => `Radio1: ${d.data.rc1.toFixed(2)}`)
+                .attr('x', 0)
+                .attr('y', 20);
+
+            node.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('dominant-baseline', 'middle')
+                .text(d => `Radio2: ${d.data.rc2.toFixed(2)}`)
+                .attr('x', 0)
+                .attr('y', 40);
+        }
+
+
+        function highlightResults(resultados) {
+            redrawCanvas();
+            ctx.fillStyle = 'red';
+            resultados.forEach(res => {
+                const { punto, radio } = res;
+                drawPoint(punto.x, punto.y);
+                drawCircle(punto.x, punto.y, radio);
+            });
+            ctx.fillStyle = 'black';
+        }
+
+        function drawCircle(x, y, radius) {
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, 2 * Math.PI);
+            ctx.stroke();
+        }
+    </script>
+</body>
+</html>
