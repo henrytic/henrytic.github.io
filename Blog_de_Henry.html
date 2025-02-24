@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog de Mi Mejor Amiga</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6a4c93;
+            --secondary-color: #8ac4ff;
+            --accent-color: #ffb6c1;
+            --dark-color: #355070;
+            --light-color: #f8f9fa;
+        }
+        
+        body {
+            background-color: #edf2f7;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 0.95rem;
+        }
+        
+        .navbar {
+            background-color: var(--primary-color) !important;
+            padding: 0.5rem 1rem;
+            box-shadow: 0 4px 12px rgba(106, 76, 147, 0.2);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+            font-size: 1.3rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+            z-index: -1;
+        }
+        
+        .nav-link:hover::before {
+            width: 100%;
+        }
+        
+        .nav-link:hover {
+            color: white !important;
+        }
+        
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white !important;
+        }
+        
+        .nav-link.active::before {
+            width: 100%;
+        }
+        
+        .container-fluid {
+            max-width: 1300px;
+        }
+        
+        .hero-section {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            padding: 20px;
+            border-top: 5px solid var(--primary-color);
+        }
+        
+        .friend-title {
+            color: var(--primary-color);
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-size: 1.9rem;
+        }
+        
+        .friend-title::before {
+            content: "";
+            position: absolute;
+            width: 40px;
+            height: 5px;
+            bottom: -8px;
+            left: 0;
+            background-color: var(--accent-color);
+            border-radius: 10px;
+        }
+        
+        .friend-title::after {
+            content: "";
+            position: absolute;
+            width: 80px;
+            height: 5px;
+            bottom: -8px;
+            left: 44px;
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+        }
+        
+        .blog-content {
+            line-height: 1.7;
+        }
+        
+        .blog-content p {
+            margin-bottom: 12px;
+        }
+        
+        .friend-image {
+            border-radius: 50% 10px 10px 50%;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease;
+            border: 4px solid white;
+            max-height: 300px;
+            object-fit: cover;
+        }
+        
+        .friend-image:hover {
+            transform: scale(1.03) rotate(2deg);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .sidebar {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+        
+        .sidebar h5 {
+            color: var(--primary-color);
+            border-bottom: 2px dashed var(--secondary-color);
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .sidebar h5::after {
+            content: "♥";
+            position: absolute;
+            right: -20px;
+            color: var(--accent-color);
+        }
+        
+        .sidebar-links a {
+            color: var(--dark-color);
+            text-decoration: none;
+            display: block;
+            padding: 6px 0;
+            transition: all 0.3s;
+            border-bottom: 1px dotted #eee;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar-links a:hover {
+            color: var(--primary-color);
+            transform: translateX(5px);
+            background-color: rgba(138, 196, 255, 0.1);
+            padding-left: 5px;
+        }
+        
+        .sidebar-links i {
+            margin-right: 8px;
+            color: var(--primary-color);
+        }
+        
+        .footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 25px 0 15px;
+            margin-top: 30px;
+            border-top: 5px solid var(--primary-color);
+        }
+        
+        .social-icons a {
+            color: white;
+            font-size: 1.3rem;
+            margin-right: 12px;
+            transition: all 0.3s;
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            line-height: 36px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+        
+        .social-icons a:hover {
+            color: white;
+            transform: translateY(-3px);
+            background-color: var(--primary-color);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .custom-shape-divider-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+            z-index: -1;
+        }
+        
+        .custom-shape-divider-top svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 150px;
+        }
+        
+        .custom-shape-divider-top .shape-fill {
+            fill: rgba(138, 196, 255, 0.2);
+        }
+        
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Badge personalizado */
+        .custom-badge {
+            background-color: var(--accent-color);
+            color: var(--dark-color);
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 30px;
+            margin-left: 8px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            vertical-align: middle;
+        }
+        
+        /* Decoraciones */
+        .decoration-dot {
+            height: 7px;
+            width: 7px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            display: inline-block;
+            margin: 0 5px;
+        }
+        
+        /* Tarjetas más compactas para artículos recientes */
+        .recent-post-card {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .recent-post-card:hover {
+            background-color: white;
+            transform: translateX(5px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .recent-post-card h6 {
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        .recent-post-card p {
+            margin-bottom: 0;
+            font-size: 0.75rem;
+            color: #666;
+        }
+        
+        /* Estilos adicionales para texto */
+        .lead {
+            font-size: 1.1rem;
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+        
+        /* Scrollbar personalizado */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color); 
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--dark-color); 
+        }
+        
+        /* Sección de galería */
+        .mini-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .mini-gallery img {
+            width: 100%;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 5px;
+            transition: all 0.3s;
+            border: 2px solid white;
+        }
+        
+        .mini-gallery img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            position: relative;
+        }
+        
+        /* Tag cloud */
+        .tag-cloud {
+            margin-top: 15px;
+        }
+        
+        .tag {
+            display: inline-block;
+            background-color: rgba(138, 196, 255, 0.2);
+            color: var(--dark-color);
+            padding: 3px 10px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            margin: 0 5px 5px 0;
+            transition: all 0.3s;
+        }
+        
+        .tag:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Quote personalizado */
+        .custom-quote {
+            background-color: rgba(138, 196, 255, 0.1);
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin: 15px 0;
+            position: relative;
+            font-style: italic;
+            color: var(--dark-color);
+        }
+        
+        .custom-quote::before {
+            content: '"';
+            font-size: 60px;
+            color: rgba(138, 196, 255, 0.3);
+            position: absolute;
+            top: -15px;
+            left: 5px;
+        }
+        
+        /* Scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(106, 76, 147, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .scroll-top:hover {
+            background-color: var(--dark-color);
+            transform: translateY(-3px);
+        }
+        
+        .goog-te-banner-frame.skiptranslate {
+        display: none !important;
+        }
+        body {
+        top: 0px !important;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Decoración superior -->
+    <div class="custom-shape-divider-top">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+        </svg>
+    </div>
+
+    <!-- Navbar/Encabezado -->
+    <nav class="navbar navbar-expand-lg navbar-dark py-2 mb-3">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-heart me-2"></i>Mi Personal Blog
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-user me-1"></i>About me
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-map-marked-alt me-1"></i>Adventures
+                            <span class="custom-badge">New</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-images me-1"></i>Gallery
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-envelope me-1"></i>Contact
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <div class="container content-wrapper">
+        <div class="row g-3">
+            <!-- Sidebar con la imagen y más -->
+            <div class="col-lg-3 order-lg-1 order-2">
+                <div class="sidebar text-center">
+                    <img src="/Francy.jpg" alt="Mi best friend and I" class="img-fluid friend-image mb-2">
+                    <p class="text-center fst-italic mb-0" style="font-size: 0.85rem; color: #666;">My best friend and I</p>
+                </div>
+                
+                <div class="sidebar">
+                    <h5>Categories</h5>
+                    <div class="sidebar-links">
+                        <a href="#"><i class="fas fa-plane-departure"></i> Travel</a>
+                        <a href="#"><i class="fas fa-camera"></i> Photos</a>
+                        <a href="#"><i class="fas fa-book"></i> Recomendations</a>
+                        <a href="#"><i class="fas fa-laugh-beam"></i> Anecdotes</a>
+                        <a href="#"><i class="fas fa-heart"></i> Councils</a>
+                    </div>
+                </div>
+                
+                <div class="sidebar">
+                    <h5>Tags</h5>
+                    <div class="tag-cloud">
+                        <a href="#" class="tag">friendship</a>
+                        <a href="#" class="tag">travel</a>
+                        <a href="#" class="tag">memories</a>
+                        <a href="#" class="tag">Adventures</a>
+                        <a href="#" class="tag">councils</a>
+                        <a href="#" class="tag">photos</a>
+                        <a href="#" class="tag">moments</a>
+                        <a href="#" class="tag">happiness</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenido del Blog -->
+            <div class="col-lg-6 order-lg-2 order-1">
+                <div class="hero-section">
+                    <h1 class="friend-title">Mi Best Friend</h1>
+                    <div class="blog-content">
+                        <p class="lead">Welcome to my little corner of the internet where I will share all the adventures with my best friend!</p>
+                        
+                        <div class="custom-quote">
+                            Friendship doubles joys and divides anxieties in half.
+                        </div>
+                        
+                        <p>I have many friends, but only a few with whom I share a deep connection.</p>
+                        
+                        <p>One of my closest friends is someone I met at university during personalized tutoring sessions.</p>
+                        
+                        <h4 class="mt-3 mb-2 text-primary">About our friendship <span class="decoration-dot"></span></h4>
+                        <p>I was her tutor, and she was a new student at the university. At first, our conversations were focused on her studies, but soon we discovered we had a lot in common.</p>
+                        
+                        <p>During one of our tutoring sessions, we realized we both share a love for video games and a passion for teaching others. She teaches English to children, while I teach programming to kids. Our shared interest in gaming brought us even closer—we both enjoy playing titles like GTA V, Genshin Impact, and Mobile Legends together.</p>
+                        <p>Our conversations often dive deep into topics we’re both passionate about. We love discussing emerging technologies and how quickly they’re advancing. For example, we recently talked about quantum computers and how they can perform complex calculations in minutes that would take a normal computer years to complete. Of course, we also chat about video games, discussing new events, strategies, and how to participate in different in-game activities.</p>
+
+                        <p>We enjoy spending time together doing various activities. We often team up to play online games, attend university classes together, go on trips, and study side by side. It’s great to have a friend who shares so many of my interests and brings so much joy and inspiration to my life.</p>
+                        
+                        <h4 class="mt-3 mb-2 text-primary">What you'll find here <span class="decoration-dot"></span></h4>
+                        <ul class="small">
+                            <li>Stories of our adventures and travels</li>
+                            <li>Photos of special moments</li>
+                            <li>Friendship and relationship tips</li>
+                            <li>Our favorite recommendations</li>
+                            <li>Funny stories that will make you smile</li>
+                        </ul>
+                        
+                        <p class="mt-3">I hope you enjoy reading this blog as much as I enjoy writing it!</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar derecha -->
+            <div class="col-lg-3 order-lg-3 order-3">
+                <div class="sidebar">
+                    <h5>Recent</h5>
+                    <div class="recent-post-card">
+                        <h6>Our weekend getaway</h6>
+                        <p><i class="far fa-calendar-alt me-1"></i> 10 Feb, 2025</p>
+                    </div>
+                    <div class="recent-post-card">
+                        <h6>15 Years of Friendship: What We Learned</h6>
+                        <p><i class="far fa-calendar-alt me-1"></i> 28 Jan, 2025</p>
+                    </div>
+                    <div class="recent-post-card">
+                        <h6>5 Reasons Why My Best Friend Is Amazing</h6>
+                        <p><i class="far fa-calendar-alt me-1"></i> 15 Jan, 2025</p>
+                    </div>
+                    <div class="recent-post-card">
+                        <h6>Memories of our first adventure</h6>
+                        <p><i class="far fa-calendar-alt me-1"></i> 5 Jan, 2025</p>
+                    </div>
+                </div>
+                
+                <div class="sidebar">
+                    <h5>Moments</h5>
+                    <div class="mini-gallery">
+                        <img src="/francy2.jpg" alt="Momento especial">
+                        <img src="/Francy.jpg" alt="Momento especial">
+                        <img src="/aventura_1.jpg" alt="Momento especial">
+                        <img src="aventura_2.jpg" alt="Momento especial">
+                        <img src="/aventura_3.jpg" alt="Momento especial">
+                        <img src="/aventura_4.jpg" alt="Momento especial">
+                    </div>
+                </div>
+                
+                <div class="sidebar">
+                    <h5>Quote of the day</h5>
+                    <div class="text-center mt-2">
+                        <i class="fas fa-quote-left text-secondary me-1"></i>
+                        True friendship is like health, you don't know its value until you lose it.
+                        <i class="fas fa-quote-right text-secondary ms-1"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row gy-3">
+                <div class="col-md-6">
+                    <h5 class="mb-2">Mi Personal Blog</h5>
+                    <p class="small mb-0">A space dedicated to celebrating friendship and the special moments we share together.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="social-icons mb-2">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                    <p class="small mb-0">&copy; 2025 Mi Personal Blog. All rights reserved..</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Botón de scroll arriba -->
+    <div class="scroll-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Script para el botón de scroll arriba
+        document.addEventListener('DOMContentLoaded', function() {
+            const scrollTopBtn = document.querySelector('.scroll-top');
+            
+            // Mostrar/ocultar botón según la posición del scroll
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    scrollTopBtn.style.opacity = '1';
+                } else {
+                    scrollTopBtn.style.opacity = '0';
+                }
+            });
+            
+            // Acción al hacer clic en el botón
+            scrollTopBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+    
+</body>
+</html>
